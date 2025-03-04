@@ -5,7 +5,7 @@ target/
 *.ear
 
 # Ignore IntelliJ IDEA files
-.idea\
+.idea/
 *.iml
 *.iws
 
@@ -61,3 +61,5 @@ dependency-reduced-pom.xml
 
 # Ignore JetBrains-related files
 /out/
+.idea/misc.xml
+.idea/misc.xml

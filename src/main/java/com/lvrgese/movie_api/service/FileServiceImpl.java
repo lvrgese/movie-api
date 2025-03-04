@@ -13,6 +13,9 @@ public class FileServiceImpl implements FileService {
     @Override
     public String uploadFile(String path, MultipartFile file) throws IOException {
 
+        if(file.isEmpty()){
+            throw new IllegalStateException("FIle is empty");
+        }
         String fileName=file.getOriginalFilename();
         String filePath=path + File.separator + fileName;
 

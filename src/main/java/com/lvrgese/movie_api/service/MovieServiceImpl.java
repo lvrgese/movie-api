@@ -1,12 +1,18 @@
 package com.lvrgese.movie_api.service;
 
 import com.lvrgese.movie_api.dto.MovieDto;
+import com.lvrgese.movie_api.dto.MoviePageResponse;
 import com.lvrgese.movie_api.entity.Movie;
 import com.lvrgese.movie_api.exceptions.FileAlreadyExistsException;
+import com.lvrgese.movie_api.exceptions.InvalidSortArgumentException;
 import com.lvrgese.movie_api.exceptions.MovieNotFoundException;
 import com.lvrgese.movie_api.mappers.MovieMapper;
 import com.lvrgese.movie_api.repository.MovieRepository;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -104,5 +110,42 @@ public class MovieServiceImpl implements MovieService{
         Files.deleteIfExists(Paths.get(uploadDir+File.separator+movie.getPoster()));
         movieRepository.deleteById(id);
         return "Successfully deleted item with id : "+id;
+    }
+
+    @Override
+    public MoviePageResponse getAllMoviesWithPagination(Integer pageNumber, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber,pageSize);
+        return getMoviePageResponse(pageable);
+    }
+
+    @Override
+    public MoviePageResponse getAllMoviesWithPaginationAndSorting(Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
+        try {
+            Sort.Direction direction = Sort.Direction.fromString(sortDir);
+            Sort sort = Sort.by(direction, sortBy);
+            Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+            return getMoviePageResponse(pageable);
+        }
+        catch (Exception e){
+            throw new InvalidSortArgumentException("Invalid sort Parameter : sortBy "+sortBy +" sortDir "+sortDir);
+        }
+    }
+
+    private MoviePageResponse getMoviePageResponse(Pageable pageable){
+        Page<Movie> page =movieRepository.findAll(pageable);
+        List<MovieDto> movieDtoList=new ArrayList<>();
+        for(Movie m : page.getContent()){
+            MovieDto temp = MovieMapper.toMovieDto(m);
+            temp.setPosterUrl(baseUrl+m.getPoster());
+            movieDtoList.add(temp);
+        }
+        return MoviePageResponse.builder()
+                .movieDtoList(movieDtoList)
+                .currentPage(page.getNumber())
+                .pageSize(page.getSize())
+                .totalNumberOfRecords((int) page.getTotalElements())
+                .totalNumberOfPages(page.getTotalPages())
+                .isLastPage(page.isLast())
+                .build();
     }
 }

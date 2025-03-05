@@ -2,7 +2,9 @@ package com.lvrgese.movie_api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lvrgese.movie_api.dto.MovieDto;
+import com.lvrgese.movie_api.dto.MoviePageResponse;
 import com.lvrgese.movie_api.service.MovieService;
+import com.lvrgese.movie_api.utils.AppConstants;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import org.springframework.http.HttpStatus;
@@ -63,4 +65,23 @@ public class MovieController {
     public ResponseEntity<String> deleteMovie(@PathVariable Integer id) throws IOException {
         return  ResponseEntity.ok(movieService.deleteMovieById(id));
     }
+
+    @GetMapping("movies/paged")
+    public ResponseEntity<MoviePageResponse> getAllMoviesWithPagination(
+            @RequestParam(defaultValue = AppConstants.DEFAULT_PAGE_NUMBER,required = false) Integer page,
+            @RequestParam(defaultValue = AppConstants.DEFAULT_PAGE_SIZE,required = false) Integer size
+    ){
+        return ResponseEntity.ok(movieService.getAllMoviesWithPagination(page,size));
+    }
+
+    @GetMapping("movies/paged-sorted")
+    public ResponseEntity<MoviePageResponse> getAllMoviesWithPaginationAndSorting(
+            @RequestParam(defaultValue = AppConstants.DEFAULT_PAGE_NUMBER,required = false) Integer page,
+            @RequestParam(defaultValue = AppConstants.DEFAULT_PAGE_SIZE,required = false) Integer size,
+            @RequestParam(defaultValue = AppConstants.DEFAULT_SORT_COLUMN,required = false) String sortBy,
+            @RequestParam(defaultValue = AppConstants.DEFAULT_SORT_DIRECTION,required = false) String dir
+    ){
+        return ResponseEntity.ok(movieService.getAllMoviesWithPaginationAndSorting(page,size,sortBy,dir));
+    }
+
 }

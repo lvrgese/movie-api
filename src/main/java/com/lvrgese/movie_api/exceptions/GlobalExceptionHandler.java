@@ -22,4 +22,9 @@ public class GlobalExceptionHandler {
     public ProblemDetail movieNotFoundExceptionHandler(MovieNotFoundException ex){
         return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND,ex.getMessage());
     }
+
+    @ExceptionHandler(InvalidSortArgumentException.class)
+    public ProblemDetail invalidSortArgumentExceptionHandler(InvalidSortArgumentException ex){
+        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST,ex.getMessage());
+    }
 }

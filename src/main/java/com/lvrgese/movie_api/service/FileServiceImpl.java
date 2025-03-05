@@ -5,6 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
@@ -21,10 +22,10 @@ public class FileServiceImpl implements FileService {
 
         File fileInstance=new File(path);
         if(!fileInstance.exists()) {
-            Boolean res = fileInstance.mkdir();
+            Boolean res = fileInstance.mkdirs();
         }
 
-        Files.copy(file.getInputStream(), Paths.get(filePath), StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(file.getInputStream(), Paths.get(filePath));
         return fileName;
     }
 

@@ -1,14 +1,14 @@
 package com.lvrgese.movie_api.mappers;
 
-import com.lvrgese.movie_api.dto.MovieDTO;
+import com.lvrgese.movie_api.dto.MovieDto;
 import com.lvrgese.movie_api.entity.Movie;
 
 public class MovieMapper {
 
-    public static MovieDTO toMovieDTO(Movie movie){
+    public static MovieDto toMovieDto(Movie movie){
         if(movie == null)
             return null;
-        return MovieDTO.builder()
+        return MovieDto.builder()
                 .movieId(movie.getMovieId())
                 .title(movie.getTitle())
                 .directorName(movie.getDirectorName())
@@ -19,17 +19,17 @@ public class MovieMapper {
                 .build();
     }
 
-    public static Movie toMovie(MovieDTO movieDTO){
-        if(movieDTO == null)
+    public static Movie toMovie(MovieDto movieDto){
+        if(movieDto == null)
             return null;
         return Movie.builder()
-                .movieId(movieDTO.getMovieId())
-                .title(movieDTO.getTitle())
-                .directorName(movieDTO.getDirectorName())
-                .studioName(movieDTO.getStudioName())
-                .releaseYear(movieDTO.getReleaseYear())
-                .movieCast(movieDTO.getMovieCast())
-                .poster(movieDTO.getPoster())
+                .movieId(movieDto.getMovieId())
+                .title(movieDto.getTitle())
+                .directorName(movieDto.getDirectorName())
+                .studioName(movieDto.getStudioName())
+                .releaseYear(movieDto.getReleaseYear())
+                .movieCast(movieDto.getMovieCast())
+                .poster(movieDto.getPoster())
                 .build();
     }
 }

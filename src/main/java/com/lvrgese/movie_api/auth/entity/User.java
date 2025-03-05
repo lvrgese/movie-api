@@ -38,6 +38,8 @@ public class User implements UserDetails{
     private Boolean isAccountNonLocked=true;
     private Boolean isCredentialsNonExpired=true;
     private Boolean isEnabled=true;
+    @OneToOne(mappedBy = "user")
+    private RefreshToken refreshToken;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

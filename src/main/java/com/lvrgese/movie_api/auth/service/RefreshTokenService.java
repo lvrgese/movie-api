@@ -4,6 +4,7 @@ import com.lvrgese.movie_api.auth.entity.RefreshToken;
 import com.lvrgese.movie_api.auth.entity.User;
 import com.lvrgese.movie_api.auth.repository.RefreshTokenRepository;
 import com.lvrgese.movie_api.auth.repository.UserRepository;
+import com.lvrgese.movie_api.exceptions.InvalidRefreshTokenException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -42,10 +43,10 @@ public class RefreshTokenService {
 
     public RefreshToken validateRefreshToken(String token){
         RefreshToken refreshToken = refreshTokenRepository.findByRefreshToken(token)
-                .orElseThrow(()-> new RuntimeException("Refresh token is not valid"));
+                .orElseThrow(()-> new InvalidRefreshTokenException("Refresh token is not valid"));
         if(refreshToken.getExpirationTime().compareTo(Instant.now())<0){
             refreshTokenRepository.delete(refreshToken);
-            throw new RuntimeException("Refresh token expired");
+            throw new InvalidRefreshTokenException("Refresh token expired");
         }
         return refreshToken;
     }

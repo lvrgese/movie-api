@@ -9,6 +9,7 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,6 +29,7 @@ public class MovieController {
         this.validator = validator;
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/movie")
     public ResponseEntity<?> addMovie(@RequestPart MultipartFile file,@RequestPart String movieDto) throws IOException {
 
@@ -50,6 +52,7 @@ public class MovieController {
         return ResponseEntity.ok(movieService.getAllMovies());
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/movie/{id}")
     public ResponseEntity<?> updateMovie(@PathVariable Integer id, @RequestPart MultipartFile file, @RequestPart String movieDto) throws IOException {
         MovieDto dto = new ObjectMapper().readValue(movieDto,MovieDto.class);
@@ -61,6 +64,7 @@ public class MovieController {
         return ResponseEntity.ok(movieService.updateMovieById(id, dto, file));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/movie/{id}")
     public ResponseEntity<String> deleteMovie(@PathVariable Integer id) throws IOException {
         return  ResponseEntity.ok(movieService.deleteMovieById(id));

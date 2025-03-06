@@ -27,4 +27,14 @@ public class GlobalExceptionHandler {
     public ProblemDetail invalidSortArgumentExceptionHandler(InvalidSortArgumentException ex){
         return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST,ex.getMessage());
     }
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public ProblemDetail userAlreadyExistsExceptionHandler(UserAlreadyExistsException ex){
+        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST,ex.getMessage());
+    }
+
+    @ExceptionHandler(InvalidRefreshTokenException.class)
+    public ProblemDetail invalidRefreshTokenExceptionHandler(InvalidRefreshTokenException ex){
+        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST,ex.getMessage());
+    }
+
 }
